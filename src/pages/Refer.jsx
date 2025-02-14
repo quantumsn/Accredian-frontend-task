@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { HeroSection, PopUpModel, Footer } from "../Components";
 
 export default function Home() {
@@ -9,6 +9,7 @@ export default function Home() {
     course: "",
   });
   const [errors, setErrors] = useState({});
+  const [courses, setCourses] = useState([]);
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -28,6 +29,28 @@ export default function Home() {
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
+
+  useEffect(() => {
+    const url = import.meta.env.VITE_BACKEND_URL;
+    const getData = async () => {
+      try {
+        let response = await fetch(`${url}/programs`, {
+          method: "GET",
+          credentials: "include",
+        });
+
+        if (!response.ok) {
+          console.error("Profile Error:", errorData.message);
+        } else {
+          let courseData = await response.json();
+          setCourses(courseData);
+        }
+      } catch (err) {
+        console.error(err.message);
+      }
+    };
+    getData();
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -52,6 +75,7 @@ export default function Home() {
         errors={errors}
         formData={formData}
         handleChange={handleChange}
+        courses={courses}
       />
     </div>
   );

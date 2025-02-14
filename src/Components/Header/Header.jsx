@@ -1,8 +1,12 @@
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
+import AccountBoxIcon from "@mui/icons-material/AccountBox";
+import { useAuth } from "../../Context/AuthProvidor";
 
 const Header = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  const { isAuthenticated } = useAuth();
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -39,25 +43,20 @@ const Header = () => {
               Programs
             </NavLink>
           </li>
-          <li className="text-gray-700 hover:text-blue-600 cursor-pointer">
-            <NavLink
-              to="/profile"
-              className={({ isActive }) =>
-                isActive ? "text-blue-600" : "text-gray-700"
-              }
-            >
-              Profile
-            </NavLink>
-          </li>
         </ul>
-        <div className="hidden md:flex gap-4">
-          <button className="hidden md:block bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded">
-            <NavLink to="/signup">Sign Up</NavLink>
-          </button>
-          <button className="hidden md:block text-gray-900 hover:bg-blue-200 py-2 px-4 rounded">
-            <NavLink to="/login">Login</NavLink>
-          </button>
-        </div>
+        {isAuthenticated && (
+          <NavLink
+            className={({ isActive }) =>
+              isActive ? "text-blue-600" : "text-gray-700"
+            }
+            to="/profile"
+          >
+            <div className="hidden md:flex items-center cursor-pointer hover:text-blue-600 transition duration-300 ease-in-out transform hover:scale-110">
+              <AccountBoxIcon />
+              <p>Profile</p>
+            </div>
+          </NavLink>
+        )}
         <div className="md:hidden">
           <button
             className="text-gray-700 hover:text-blue-600"
@@ -132,26 +131,18 @@ const Header = () => {
               Programs
             </NavLink>
           </li>
-          <li className="text-gray-700 hover:text-blue-600 cursor-pointer">
-            <NavLink
-              to="/profile"
-              className={({ isActive }) =>
-                isActive ? "text-blue-600" : "text-gray-700"
-              }
-            >
-              Profile
-            </NavLink>
-          </li>
-          <li>
-            <button className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded w-full">
-              <NavLink to="/signup">Sign Up</NavLink>
-            </button>
-          </li>
-          <li>
-            <button className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded w-full">
-              <NavLink to="/login">Login</NavLink>
-            </button>
-          </li>
+          {isAuthenticated && (
+            <li className="text-gray-700 hover:text-blue-600 cursor-pointer">
+              <NavLink
+                to="/profile"
+                className={({ isActive }) =>
+                  isActive ? "text-blue-600" : "text-gray-700"
+                }
+              >
+                Profile
+              </NavLink>
+            </li>
+          )}
         </ul>
       </div>
     </header>

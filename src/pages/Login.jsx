@@ -2,18 +2,18 @@ import { useState } from "react";
 import { InputBox } from "../Components";
 import { Link, useNavigate } from "react-router-dom";
 import CloseIcon from "@mui/icons-material/Close";
-// import { useAuth } from "../../contexts/AuthProvidor";
-// import { useFlashMsg } from "../../contexts/FlashMsgProvidor";
+import { useAuth } from "../Context/AuthProvidor";
+import { useFlashMsg } from "../Context/FlashMsgProvidor";
 
 export default function Login() {
   const [userData, setUserData] = useState({
     username: "",
     password: "",
   });
-  //   const [errMsg, setErrMsg] = useState(null);
-  //   const navigate = useNavigate();
-  //   const { login } = useAuth();
-  //   const { addFlashMsg } = useFlashMsg();
+  const [errMsg, setErrMsg] = useState(null);
+  const navigate = useNavigate();
+  const { login } = useAuth();
+  const { addFlashMsg } = useFlashMsg();
 
   const handleOnChange = (e) => {
     setUserData((prevData) => ({
@@ -24,30 +24,30 @@ export default function Login() {
 
   const handleSumbit = async (e) => {
     e.preventDefault();
-    // const url = import.meta.env.VITE_BACKEND_API_URL;
-    // try {
-    //   let response = await fetch(`${url}/user/signup`, {
-    //     method: "POST",
-    //     credentials: "include",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify(userData),
-    //   });
-    //   if (!response.ok) {
-    //     let errorData = await response.json();
-    //     console.error("Signup Error:", errorData.error);
-    //     setErrMsg("Username is already exist");
-    //   } else {
-    //     login("authenticated");
-    //     let successMsg = await response.json();
-    //     addFlashMsg(successMsg.message);
-    //     navigate("/");
-    //   }
-    // } catch (err) {
-    //   console.log("Error to Signup : ", err.message);
-    // }
-    console.log(userData);
+    const url = import.meta.env.VITE_BACKEND_URL;
+    try {
+      let response = await fetch(`${url}/user/login`, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userData),
+      });
+      if (!response.ok) {
+        let errorData = await response.json();
+        console.error("Login Error:", errorData.message);
+        setErrMsg("Username is already exist");
+      } else {
+        login("authenticated");
+        let successMsg = await response.json();
+        addFlashMsg(successMsg.message);
+        navigate("/");
+      }
+    } catch (err) {
+      console.log("Error to Signup : ", err.message);
+    }
+
     setUserData({ username: "", password: "" });
   };
 

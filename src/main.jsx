@@ -10,8 +10,9 @@ import {
   createRoutesFromElements,
 } from "react-router-dom";
 
-import { Refer, Programs, Register, Login, Profile } from "./pages";
+import { Refer, Programs, Register, Login, Profile, ErrorPage } from "./pages";
 import { Loader } from "./Components";
+import ProtectedRoutes from "./Context/ProtectedRoute.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -19,17 +20,21 @@ const router = createBrowserRouter(
       <Route
         path=""
         element={
-          <Suspense fallback={<Loader />}>
-            <Refer />
-          </Suspense>
+          <ProtectedRoutes>
+            <Suspense fallback={<Loader />}>
+              <Refer />
+            </Suspense>
+          </ProtectedRoutes>
         }
       />
       <Route
         path="/programs"
         element={
-          <Suspense fallback={<Loader />}>
-            <Programs />
-          </Suspense>
+          <ProtectedRoutes>
+            <Suspense fallback={<Loader />}>
+              <Programs />
+            </Suspense>
+          </ProtectedRoutes>
         }
       />
       <Route
@@ -51,12 +56,14 @@ const router = createBrowserRouter(
       <Route
         path="/profile"
         element={
-          <Suspense fallback={<Loader />}>
-            <Profile />
-          </Suspense>
+          <ProtectedRoutes>
+            <Suspense fallback={<Loader />}>
+              <Profile />
+            </Suspense>
+          </ProtectedRoutes>
         }
       />
-      {/* <Route path="*" element={<ErrorPage />} /> */}
+      <Route path="*" element={<ErrorPage />} />
     </Route>
   )
 );

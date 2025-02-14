@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Button,
   Dialog,
@@ -6,6 +6,10 @@ import {
   DialogContent,
   DialogTitle,
   TextField,
+  MenuItem,
+  Select,
+  FormControl,
+  InputLabel,
 } from "@mui/material";
 
 const PopUpModel = ({
@@ -15,6 +19,7 @@ const PopUpModel = ({
   handleChange,
   errors,
   handleSubmit,
+  courses,
 }) => {
   return (
     <>
@@ -44,16 +49,24 @@ const PopUpModel = ({
               fullWidth
               className="mb-4"
             />
-            <TextField
-              label="Course Name"
-              name="course"
-              value={formData.course}
-              onChange={handleChange}
-              error={!!errors.course}
-              helperText={errors.course}
-              fullWidth
-              className="mb-4"
-            />
+            <FormControl fullWidth className="mb-4" error={!!errors.course}>
+              <InputLabel>Course Name</InputLabel>
+              <Select
+                label="Course Name"
+                name="course"
+                value={formData.course}
+                onChange={handleChange}
+              >
+                {courses.map((course, idx) => (
+                  <MenuItem key={idx} value={course.name}>
+                    {course.name}
+                  </MenuItem>
+                ))}
+              </Select>
+              {errors.course && (
+                <span className="text-red-500 text-sm">{errors.course}</span>
+              )}
+            </FormControl>
           </form>
         </DialogContent>
         <DialogActions className="p-4 bg-gradient-to-l from-blue-500/50 to-blue-200">

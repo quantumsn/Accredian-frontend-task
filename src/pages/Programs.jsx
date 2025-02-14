@@ -1,45 +1,31 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { FaGraduationCap } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
 const Programs = () => {
-  const programs = [
-    {
-      name: "Professional Certificate Program in Product Management",
-      referrer: "₹ 7,000",
-      referee: "₹ 9,000",
-    },
-    {
-      name: "PG Certificate Program in Strategic Product Management",
-      referrer: "₹ 9,000",
-      referee: "₹ 11,000",
-    },
-    {
-      name: "Executive Program in Data Driven Product Management",
-      referrer: "₹ 10,000",
-      referee: "₹ 10,000",
-    },
-    {
-      name: "Executive Program in Product Management and Digital Transformation",
-      referrer: "₹ 10,000",
-      referee: "₹ 10,000",
-    },
-    {
-      name: "Executive Program in Product Management",
-      referrer: "₹ 10,000",
-      referee: "₹ 10,000",
-    },
-    {
-      name: "Advanced Certification in Product Management",
-      referrer: "₹ 10,000",
-      referee: "₹ 10,000",
-    },
-    {
-      name: "Executive Program in Product Management and Project Management",
-      referrer: "₹ 10,000",
-      referee: "₹ 10,000",
-    },
-  ];
+  const [programs, setPrograms] = useState([]);
+
+  useEffect(() => {
+    const url = import.meta.env.VITE_BACKEND_URL;
+    const getData = async () => {
+      try {
+        let response = await fetch(`${url}/programs`, {
+          method: "GET",
+          credentials: "include",
+        });
+
+        if (!response.ok) {
+          console.error("Profile Error:", errorData.message);
+        } else {
+          let programData = await response.json();
+          setPrograms(programData);
+        }
+      } catch (err) {
+        console.error(err.message);
+      }
+    };
+    getData();
+  }, []);
 
   return (
     <div className="p-6 flex flex-col items-center justify-center">
@@ -73,10 +59,10 @@ const Programs = () => {
                     </span>
                   </td>
                   <td className="p-4 text-center font-semibold text-gray-800">
-                    {program.referrer}
+                    ₹ {program.referrer}
                   </td>
                   <td className="p-4 text-center font-semibold text-gray-800">
-                    {program.referee}
+                    ₹ {program.referee}
                   </td>
                 </tr>
               ))}
